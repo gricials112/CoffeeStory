@@ -7,5 +7,5 @@ build/
 # macOS
 .DS_Store
 
-# XcodeGen
-*.xcodeproj
+# XcodeGen (committed for Xcode Cloud)
+# *.xcodeproj

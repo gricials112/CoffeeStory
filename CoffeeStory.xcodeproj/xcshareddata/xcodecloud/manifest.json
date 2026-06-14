@@ -1,0 +1,9 @@
+{
+  "id" : "31bcaf9c-43bd-4007-9764-a6c3a846b1a1",
+  "targets" : [
+    {
+      "id" : "049f051c-9ceb-4e2b-a8c3-8b7a5d245adc",
+      "name" : "CoffeeStory"
+    }
+  ]
+}
