@@ -1,0 +1,28 @@
+{
+  "identifier" : "5C0FFEE0-0000-4000-8000-000000000001",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "28.00",
+      "familyShareable" : false,
+      "internalID" : "5C0FFEE0-0000-4000-8000-000000000010",
+      "localizations" : [
+        {
+          "description" : "永久解锁全部功能：无限豆子与冲煮、完整收敛曲线、多次对比、配方库复用、高级分享卡去水印、数据导出。",
+          "displayName" : "Brew Pro 永久版",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "com.coffestory.dialin.pro",
+      "referenceName" : "Brew Pro 永久版",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
