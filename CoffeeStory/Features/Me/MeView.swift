@@ -160,6 +160,9 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.defaultTemplate) private var defaultTemplate = PourTemplate.three.rawValue
     @AppStorage(SettingsKey.colorScheme) private var colorScheme = "system"
 
+    /// ⚠️ 上架前改成你的 GitHub Pages 地址
+    private let privacyURL = URL(string: "https://你的用户名.github.io/CoffeStory/privacy-policy.html")!
+
     var body: some View {
         Form {
             Section("冲煮默认") {
@@ -188,6 +191,14 @@ struct SettingsView: View {
             Section("关于") {
                 HStack { Text("版本"); Spacer(); Text("1.0 (M1)").foregroundStyle(DT.inkTertiary) }
                 HStack { Text("理念"); Spacer(); Text("这包豆子，越冲越好").foregroundStyle(DT.inkTertiary) }
+                Link(destination: privacyURL) {
+                    HStack {
+                        Text("隐私政策")
+                        Spacer()
+                        Image(systemName: "arrow.up.right").font(.caption).foregroundStyle(DT.inkTertiary)
+                    }
+                }
+                .tint(DT.ink)
             }
         }
         .navigationTitle("设置")
