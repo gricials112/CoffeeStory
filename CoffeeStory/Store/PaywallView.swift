@@ -78,9 +78,13 @@ struct PaywallView: View {
                         .font(.caption2).foregroundStyle(DT.inkTertiary)
                         .multilineTextAlignment(.center)
 
-                    Link("隐私政策", destination: URL(string: "https://gricials112.github.io/CoffeeStory/privacy-policy.html")!)
-                        .font(.caption2).foregroundStyle(DT.inkTertiary)
-                        .padding(.bottom, Space.xl)
+                    HStack(spacing: 16) {
+                        Link("隐私政策", destination: URL(string: "https://gricials112.github.io/CoffeeStory/privacy-policy.html")!)
+                        Text("·").font(.caption2).foregroundStyle(DT.inkTertiary)
+                        Link("用户协议", destination: URL(string: "https://gricials112.github.io/CoffeeStory/terms-of-service.html")!)
+                    }
+                    .font(.caption2).foregroundStyle(DT.inkTertiary)
+                    .padding(.bottom, Space.xl)
                 }
                 .padding(.horizontal, Space.xl)
             }
