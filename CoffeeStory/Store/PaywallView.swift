@@ -77,6 +77,9 @@ struct PaywallView: View {
                     Text("一次性付费，永久有效，无订阅。\n免费版可记录 2 包豆子、每包 6 次冲煮。")
                         .font(.caption2).foregroundStyle(DT.inkTertiary)
                         .multilineTextAlignment(.center)
+
+                    Link("隐私政策", destination: URL(string: "https://gricials112.github.io/CoffeeStory/privacy-policy.html")!)
+                        .font(.caption2).foregroundStyle(DT.inkTertiary)
                         .padding(.bottom, Space.xl)
                 }
                 .padding(.horizontal, Space.xl)

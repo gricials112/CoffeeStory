@@ -11,7 +11,7 @@ enum FreeLimits {
 @MainActor
 @Observable
 final class Entitlements {
-    static let productID = "com.coffestory.dialin.pro"
+    static let productID = "com.coffestory.coffeestory.pro"
 
     var isPro = false
     var product: Product?
