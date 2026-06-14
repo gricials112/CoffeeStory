@@ -160,8 +160,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.defaultTemplate) private var defaultTemplate = PourTemplate.three.rawValue
     @AppStorage(SettingsKey.colorScheme) private var colorScheme = "system"
 
-    /// ⚠️ 上架前改成你的 GitHub Pages 地址
-    private let privacyURL = URL(string: "https://你的用户名.github.io/CoffeStory/privacy-policy.html")!
+    private let privacyURL = URL(string: "https://gricials112.github.io/CoffeeStory/privacy-policy.html")!
 
     var body: some View {
         Form {
