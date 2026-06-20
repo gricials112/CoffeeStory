@@ -1,10 +1,16 @@
 import SwiftUI
+import Combine
 
 struct BrewingView: View {
     let controller: BrewFlowController
     @AppStorage(SettingsKey.keepScreenOn) private var keepScreenOn = true
     @AppStorage(SettingsKey.pourCumulative) private var cumulative = true
     @Namespace private var glassNS
+
+    // 到点提示：是否已越过下一段的目标时间
+    @State private var dueForNext = false
+    @State private var alertedStageIndex = -1
+    private let tick = Timer.publish(every: 0.25, on: .main, in: .common).autoconnect()
 
     private var session: ActiveBrewSession { controller.session }
     private var stages: [PourStage] { session.pours }
@@ -53,6 +59,15 @@ struct BrewingView: View {
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(DT.inkSecondary)
 
+            if dueForNext, hasNext, let next = stages[safe: currentIndex + 1] {
+                Label("该进入「\(next.label)」了", systemImage: "bell.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(DT.amber)
+                    .padding(.horizontal, Space.md).padding(.vertical, 6)
+                    .background(DT.amberSoft, in: Capsule())
+                    .transition(.opacity.combined(with: .scale))
+            }
+
             stageList
 
             Spacer(minLength: 0)
@@ -61,6 +76,23 @@ struct BrewingView: View {
         .padding(.horizontal, Space.xl)
         .padding(.bottom, Space.lg)
         .keepAwake(keepScreenOn)
+        .animation(.snappy, value: dueForNext)
+        .onReceive(tick) { _ in updateDueState() }
+    }
+
+    /// 周期性检查是否越过下一段目标时间；越过时给一次触觉提示并点亮视觉提示。
+    private func updateDueState() {
+        guard controller.isRunning, hasNext,
+              let due = stages[safe: currentIndex + 1]?.targetTime else {
+            if dueForNext { dueForNext = false }
+            return
+        }
+        let over = session.elapsed() >= due
+        if over && alertedStageIndex != currentIndex {
+            alertedStageIndex = currentIndex
+            Haptics.warning()
+        }
+        if over != dueForNext { dueForNext = over }
     }
 
     private var stageList: some View {

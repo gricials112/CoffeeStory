@@ -18,6 +18,7 @@ enum RelativeFmt {
 struct BrewTimelineCard: View {
     let brew: Brew
     let attempt: Int
+    var previous: Brew? = nil
     var compareMode: Bool = false
     var selected: Bool = false
     var onSetBest: () -> Void = {}
@@ -31,6 +32,24 @@ struct BrewTimelineCard: View {
             Text(text).font(.caption.monospacedDigit())
         }
         .foregroundStyle(DT.inkSecondary)
+    }
+
+    private func signed(_ v: Double) -> String {
+        (v > 0 ? "+" : "-") + NumFmt.g(abs(v))
+    }
+
+    /// 相对上一杯的关键参数变化
+    private var deltaParts: [String] {
+        guard let p = previous else { return [] }
+        var parts: [String] = []
+        let dg = brew.grind - p.grind
+        if abs(dg) >= 0.05 { parts.append("研磨 \(signed(dg))\(dg < 0 ? "(细)" : "(粗)")") }
+        if let t = brew.temp, let pt = p.temp, abs(t - pt) >= 0.5 {
+            parts.append("水温 \(signed(t - pt))℃")
+        }
+        let dr = brew.ratio - p.ratio
+        if abs(dr) >= 0.05 { parts.append("粉水比 \(signed(dr))") }
+        return parts
     }
 
     var body: some View {
@@ -78,6 +97,15 @@ struct BrewTimelineCard: View {
                 paramChip("scalemass", NumFmt.ratio(brew.ratio))
                 if let t = brew.temp { paramChip("thermometer.medium", "\(NumFmt.g(t))℃") }
                 if brew.totalTime > 0 { paramChip("timer", TimeFmt.mmss(brew.totalTime)) }
+            }
+
+            if !deltaParts.isEmpty {
+                HStack(alignment: .top, spacing: 5) {
+                    Image(systemName: "arrow.left.arrow.right").font(.caption2)
+                    Text("较上次：" + deltaParts.joined(separator: "、"))
+                }
+                .font(.caption)
+                .foregroundStyle(DT.inkSecondary)
             }
 
             if !brew.takeaway.isEmpty {

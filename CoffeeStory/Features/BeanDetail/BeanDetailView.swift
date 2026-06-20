@@ -26,6 +26,13 @@ struct BeanDetailView: View {
         let others = ordered.filter { $0.id != best?.id }.sorted { $0.createdAt > $1.createdAt }
         return (best.map { [$0] } ?? []) + others
     }
+    /// 每杯 → 时间上的前一杯（用于展示参数变化）
+    private var prevBrewMap: [UUID: Brew] {
+        guard ordered.count > 1 else { return [:] }
+        var m: [UUID: Brew] = [:]
+        for i in 1..<ordered.count { m[ordered[i].id] = ordered[i - 1] }
+        return m
+    }
     private var selectedCompareBrews: [Brew] {
         ordered.filter { compareSelection.contains($0.id) }
     }
@@ -216,6 +223,7 @@ struct BeanDetailView: View {
                 BrewTimelineCard(
                     brew: brew,
                     attempt: attemptMap[brew.id] ?? 0,
+                    previous: prevBrewMap[brew.id],
                     compareMode: compareMode,
                     selected: compareSelection.contains(brew.id),
                     onSetBest: { setBest(brew) },

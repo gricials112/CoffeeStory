@@ -47,6 +47,14 @@ struct PrepareView: View {
                 // 参数
                 VStack(spacing: Space.md) {
                     StepperField(title: "研磨度", value: grindBinding, range: 0...100, step: 0.5)
+                    if !controller.bean.grinderNote.isEmpty {
+                        HStack(spacing: 4) {
+                            Image(systemName: "dial.medium").font(.caption2)
+                            Text(controller.bean.grinderNote)
+                        }
+                        .font(.caption2).foregroundStyle(DT.inkTertiary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                     HStack(spacing: Space.sm) {
                         StepperField(title: "粉量", unit: "g", value: doseBinding, range: 1...200, step: 0.5, compact: true)
                         StepperField(title: "水量", unit: "g", value: waterBinding, range: 1...3000, step: 5, compact: true)

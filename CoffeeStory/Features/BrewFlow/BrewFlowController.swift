@@ -15,6 +15,16 @@ final class AppRouter {
     private func defaultTemplate() -> PourTemplate {
         PourTemplate(rawValue: UserDefaults.standard.string(forKey: SettingsKey.defaultTemplate) ?? "") ?? .three
     }
+    /// 无历史参数时，按烘焙度给出更合理的默认水温
+    private func defaultTemp(for roast: RoastLevel) -> Double {
+        switch roast {
+        case .light:       95
+        case .mediumLight: 93
+        case .medium:      91
+        case .mediumDark:  89
+        case .dark:        87
+        }
+    }
 
     /// 开始一次新的冲煮（按 I-04 规则预填）。免费版每包至多 N 次。
     func startBrew(for bean: Bean, context: ModelContext, isPro: Bool = true) {
@@ -39,7 +49,7 @@ final class AppRouter {
         session.dose = prefill?.dose ?? 15
         let ratio = prefill.map { $0.ratio } ?? defaultRatio()
         session.water = prefill?.water ?? (session.dose * ratio).rounded()
-        session.temp = prefill?.temp ?? 92
+        session.temp = prefill?.temp ?? defaultTemp(for: bean.roastLevel)
         session.pours = defaultTemplate().stages(dose: session.dose, water: session.water)
         session.phase = .prepare
 
