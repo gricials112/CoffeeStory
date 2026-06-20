@@ -22,21 +22,18 @@ struct RootView: View {
 
     var body: some View {
         TabView {
-            Tab("豆架", systemImage: "bag.fill") {
-                ShelfView()
-                    .environment(router)
-                    .environment(entitlements)
-            }
-            Tab("配方库", systemImage: "books.vertical.fill") {
-                RecipesView()
-                    .environment(router)
-                    .environment(entitlements)
-            }
-            Tab("我的", systemImage: "person.crop.circle") {
-                MeView()
-                    .environment(router)
-                    .environment(entitlements)
-            }
+            ShelfView()
+                .environment(router)
+                .environment(entitlements)
+                .tabItem { Label("豆架", systemImage: "bag.fill") }
+            RecipesView()
+                .environment(router)
+                .environment(entitlements)
+                .tabItem { Label("配方库", systemImage: "books.vertical.fill") }
+            MeView()
+                .environment(router)
+                .environment(entitlements)
+                .tabItem { Label("我的", systemImage: "person.crop.circle") }
         }
         .tint(DT.amber)
         .preferredColorScheme(scheme)

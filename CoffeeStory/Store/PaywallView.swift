@@ -65,7 +65,7 @@ struct PaywallView: View {
                             }
                             .frame(maxWidth: .infinity).padding(.vertical, 6)
                         }
-                        .buttonStyle(.glassProminent)
+                        .glassProminentButtonStyle()
                         .tint(DT.amber)
                         .disabled(ent.purchasing)
 

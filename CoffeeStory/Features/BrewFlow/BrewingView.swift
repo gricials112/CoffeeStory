@@ -96,19 +96,19 @@ struct BrewingView: View {
     private var hasNext: Bool { currentIndex < stages.count - 1 }
 
     private var controls: some View {
-        GlassEffectContainer(spacing: 14) {
+        GlassContainer(spacing: 14) {
             HStack(spacing: 14) {
                 Button { controller.undoStage() } label: {
                     Image(systemName: "arrow.uturn.backward").frame(width: 52, height: 52)
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
                 .disabled(pouredWater == 0)
 
                 Button { controller.togglePause() } label: {
                     Image(systemName: session.isPaused ? "play.fill" : "pause.fill")
                         .frame(width: 52, height: 52)
                 }
-                .buttonStyle(.glass)
+                .glassButtonStyle()
 
                 if hasNext {
                     Button { controller.nextStage() } label: {
@@ -118,13 +118,13 @@ struct BrewingView: View {
                         }
                         .font(.headline).frame(maxWidth: .infinity).frame(height: 52)
                     }
-                    .buttonStyle(.glassProminent)
+                    .glassProminentButtonStyle()
                     .tint(DT.amber)
 
                     Button { withAnimation { controller.finishBrewing() } } label: {
                         Image(systemName: "stop.fill").frame(width: 52, height: 52)
                     }
-                    .buttonStyle(.glass)
+                    .glassButtonStyle()
                     .tint(DT.coffee)
                 } else {
                     Button { withAnimation { controller.finishBrewing() } } label: {
@@ -134,7 +134,7 @@ struct BrewingView: View {
                         }
                         .font(.headline).frame(maxWidth: .infinity).frame(height: 52)
                     }
-                    .buttonStyle(.glassProminent)
+                    .glassProminentButtonStyle()
                     .tint(DT.amber)
                 }
             }

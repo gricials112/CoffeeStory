@@ -174,7 +174,7 @@ struct ShelfView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
                     }
-                    .buttonStyle(.glassProminent)
+                    .glassProminentButtonStyle()
                     .tint(DT.amber)
 
                     if activeBeans.count > 1 {
@@ -187,7 +187,7 @@ struct ShelfView: View {
                                 .font(.headline)
                                 .frame(width: 52, height: 52)
                         }
-                        .buttonStyle(.glass)
+                        .glassButtonStyle()
                     }
                 }
                 .padding(.horizontal, Space.xl)
@@ -199,7 +199,7 @@ struct ShelfView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
                 }
-                .buttonStyle(.glassProminent)
+                .glassProminentButtonStyle()
                 .tint(DT.amber)
                 .padding(.horizontal, Space.xl)
                 .padding(.bottom, Space.sm)

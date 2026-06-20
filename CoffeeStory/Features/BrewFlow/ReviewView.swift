@@ -37,7 +37,7 @@ struct ReviewView: View {
                 Label("保存这一杯", systemImage: "checkmark")
                     .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .glassProminentButtonStyle()
             .tint(DT.amber)
             .padding(.horizontal, Space.xl)
             .padding(.bottom, Space.sm)

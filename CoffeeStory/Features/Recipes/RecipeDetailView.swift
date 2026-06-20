@@ -68,7 +68,7 @@ struct RecipeDetailView: View {
                       systemImage: ent.isPro ? "plus" : "lock.fill")
                     .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .glassProminentButtonStyle()
             .tint(DT.amber)
             .padding(.horizontal, Space.xl)
             .padding(.bottom, Space.sm)

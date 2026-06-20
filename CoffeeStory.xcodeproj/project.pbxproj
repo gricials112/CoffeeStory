@@ -39,6 +39,7 @@
 		D6ECFA0FD12FFB5DD99A0881 /* ConvergenceChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3910FC84ABB74909344DF7 /* ConvergenceChart.swift */; };
 		DA505642415033FFEECD8436 /* BeanCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA28F171E9DD974BB6C2D00 /* BeanCardView.swift */; };
 		E53BE3B53FE0B1358661A513 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EE2A74C708E5DD1A430265 /* PaywallView.swift */; };
+		E82B63B79DB19DFD1A8BD9CE /* GlassCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135ACC52578E751FE69CAE12 /* GlassCompat.swift */; };
 		E959FE36C07636DB4EA5A43A /* CompareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E404673F388F85C942B08 /* CompareView.swift */; };
 		EE27B1F6F215545A27CA8D2D /* RecipesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7463AAF3B7065F5191B1A /* RecipesView.swift */; };
 		EE8B6506200AAB7038943874 /* Products.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E1B6C6AF73AC1781CCBBD /* Products.storekit */; };
@@ -48,6 +49,7 @@
 		07DAE1CF1B6CBD7363C23A77 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0CF175151948AD83E24528DE /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		1332D44DBB39BEDE9F70705E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		135ACC52578E751FE69CAE12 /* GlassCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCompat.swift; sourceTree = "<group>"; };
 		17EE2A74C708E5DD1A430265 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		1A0E404673F388F85C942B08 /* CompareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareView.swift; sourceTree = "<group>"; };
 		1F5402294A06131E1BE12D75 /* CoffeeStoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeStoryApp.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				5824827A6FB6CFBA6DA59D9E /* DesignTokens.swift */,
+				135ACC52578E751FE69CAE12 /* GlassCompat.swift */,
 				398DEA3A648F4C137FE50766 /* Theme.swift */,
 			);
 			path = DesignSystem;
@@ -343,6 +346,7 @@
 				9027FE94B6D5F90A69E41861 /* Entitlements.swift in Sources */,
 				2610E320AA76ADFC98F609F9 /* Enums.swift in Sources */,
 				404098848699496CFE684379 /* ExportService.swift in Sources */,
+				E82B63B79DB19DFD1A8BD9CE /* GlassCompat.swift in Sources */,
 				8EEEF6553832BF3D80CE9417 /* InputComponents.swift in Sources */,
 				CFD38BF776BD45FBB1A5757F /* MeView.swift in Sources */,
 				3453418F4279C2C84076B71D /* Models.swift in Sources */,
@@ -402,7 +406,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 96UBFN3CKV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -423,8 +427,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -530,7 +534,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 96UBFN3CKV;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -545,8 +549,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

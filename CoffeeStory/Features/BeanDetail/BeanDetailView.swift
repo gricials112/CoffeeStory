@@ -259,7 +259,7 @@ struct BeanDetailView: View {
                     } label: {
                         Text("开始对比").font(.headline).padding(.horizontal, Space.lg).padding(.vertical, 4)
                     }
-                    .buttonStyle(.glassProminent)
+                    .glassProminentButtonStyle()
                     .tint(DT.amber)
                     .disabled(compareSelection.count < 2)
                 }
@@ -274,7 +274,7 @@ struct BeanDetailView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
                 }
-                .buttonStyle(.glassProminent)
+                .glassProminentButtonStyle()
                 .tint(DT.amber)
                 .padding(.horizontal, Space.xl)
                 .padding(.bottom, Space.sm)

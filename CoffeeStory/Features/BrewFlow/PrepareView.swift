@@ -102,7 +102,7 @@ struct PrepareView: View {
                 Label("开始计时", systemImage: "play.fill")
                     .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 4)
             }
-            .buttonStyle(.glassProminent)
+            .glassProminentButtonStyle()
             .tint(DT.amber)
             .padding(.horizontal, Space.xl)
             .padding(.bottom, Space.sm)
