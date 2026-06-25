@@ -170,6 +170,7 @@ struct PourStage: Codable, Hashable, Identifiable {
     var id: UUID = UUID()
     var label: String
     var targetWaterCumulative: Double
+    /// 该阶段计划完成的累计时间（秒）。
     var targetTime: TimeInterval?
     var actualAt: TimeInterval?
 }

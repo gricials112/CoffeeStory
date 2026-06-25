@@ -52,6 +52,22 @@ enum TimeFmt {
         let total = max(0, Int(t.rounded()))
         return String(format: "%d:%02d", total / 60, total % 60)
     }
+
+    static func parse(_ text: String) -> TimeInterval? {
+        let cleaned = text
+            .replacingOccurrences(of: "：", with: ":")
+            .trimmingCharacters(in: .whitespaces)
+        guard !cleaned.isEmpty else { return nil }
+        if cleaned.contains(":") {
+            let parts = cleaned.split(separator: ":", omittingEmptySubsequences: false)
+            guard parts.count == 2,
+                  let minutes = Double(parts[0]),
+                  let seconds = Double(parts[1]),
+                  seconds >= 0, seconds < 60 else { return nil }
+            return minutes * 60 + seconds
+        }
+        return Double(cleaned)
+    }
 }
 
 // MARK: - 数值格式化

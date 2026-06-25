@@ -41,7 +41,7 @@ struct BrewingView: View {
                                 .font(.headline).foregroundStyle(DT.amber)
                             HStack(spacing: 4) {
                                 Text("目标 \(NumFmt.g(stage.targetWaterCumulative))g")
-                                if let t = stage.targetTime {
+                                if let t = completionTargetTime(for: currentIndex) {
                                     Text("· \(TimeFmt.mmss(t))")
                                 }
                             }
@@ -83,7 +83,7 @@ struct BrewingView: View {
     /// 周期性检查是否越过下一段目标时间；越过时给一次触觉提示并点亮视觉提示。
     private func updateDueState() {
         guard controller.isRunning, hasNext,
-              let due = stages[safe: currentIndex + 1]?.targetTime else {
+              let due = completionTargetTime(for: currentIndex) else {
             if dueForNext { dueForNext = false }
             return
         }
@@ -108,6 +108,12 @@ struct BrewingView: View {
                     Spacer()
                     Text("\(NumFmt.g(stage.targetWaterCumulative))g")
                         .font(.caption.monospacedDigit()).foregroundStyle(DT.inkTertiary)
+                    if let t = completionTargetTime(for: idx) {
+                        Text(TimeFmt.mmss(t))
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(DT.inkTertiary)
+                            .frame(width: 44, alignment: .trailing)
+                    }
                     if let a = stage.actualAt {
                         Text(TimeFmt.mmss(a))
                             .font(.caption.monospacedDigit().weight(.semibold))
@@ -126,6 +132,18 @@ struct BrewingView: View {
     }
 
     private var hasNext: Bool { currentIndex < stages.count - 1 }
+
+    private var usesLegacyStartTimes: Bool {
+        guard stages.count > 1, let first = stages.first?.targetTime else { return false }
+        return abs(first) < 0.5
+    }
+
+    private func completionTargetTime(for idx: Int) -> TimeInterval? {
+        if usesLegacyStartTimes {
+            return stages[safe: idx + 1]?.targetTime
+        }
+        return stages[safe: idx]?.targetTime
+    }
 
     private var controls: some View {
         GlassContainer(spacing: 14) {

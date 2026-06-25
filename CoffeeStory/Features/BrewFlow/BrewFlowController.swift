@@ -50,7 +50,12 @@ final class AppRouter {
         let ratio = prefill.map { $0.ratio } ?? defaultRatio()
         session.water = prefill?.water ?? (session.dose * ratio).rounded()
         session.temp = prefill?.temp ?? defaultTemp(for: bean.roastLevel)
-        session.pours = defaultTemplate().stages(dose: session.dose, water: session.water)
+        if let pours = prefill?.pours, !pours.isEmpty {
+            let scaled = BrewFlowController.rescaledPours(pours, toWater: session.water)
+            session.pours = BrewFlowController.normalizedPours(scaled, fallbackWater: session.water, preserveLabels: true)
+        } else {
+            session.pours = defaultTemplate().stages(dose: session.dose, water: session.water)
+        }
         session.phase = .prepare
 
         context.insert(session)
@@ -81,6 +86,65 @@ final class BrewFlowController {
 
     var attemptNumber: Int { bean.brewCount + 1 }
 
+    static func rescaledPours(_ pours: [PourStage], toWater water: Double) -> [PourStage] {
+        guard !pours.isEmpty else { return pours }
+        let oldTotal = pours.last?.targetWaterCumulative ?? water
+        guard oldTotal > 0 else { return pours }
+        let factor = water / oldTotal
+        return pours.map { stage in
+            var copy = stage
+            copy.targetWaterCumulative = (stage.targetWaterCumulative * factor).rounded()
+            return copy
+        }
+    }
+
+    static func normalizedPours(_ input: [PourStage], fallbackWater: Double, preserveLabels: Bool) -> [PourStage] {
+        var source = input.isEmpty
+            ? [PourStage(label: "注水", targetWaterCumulative: fallbackWater, targetTime: 150)]
+            : migrateLegacyStartTimes(input)
+
+        var previousWater = 0.0
+        var previousTime: TimeInterval = 0
+        for idx in source.indices {
+            var stage = source[idx]
+            if !preserveLabels {
+                let label = stage.label.trimmingCharacters(in: .whitespacesAndNewlines)
+                stage.label = label.isEmpty ? "阶段 \(idx + 1)" : label
+            }
+
+            let water = stage.targetWaterCumulative.clampedTo(1...3000).rounded()
+            stage.targetWaterCumulative = max(previousWater, water)
+            previousWater = stage.targetWaterCumulative
+
+            let planned = stage.targetTime ?? previousTime + defaultDuration(for: idx)
+            stage.targetTime = max(previousTime + 5, planned.clampedTo(5...7200).rounded())
+            previousTime = stage.targetTime ?? previousTime
+            source[idx] = stage
+        }
+        return source
+    }
+
+    private static func defaultDuration(for index: Int) -> TimeInterval {
+        index == 0 ? 30 : 60
+    }
+
+    private static func migrateLegacyStartTimes(_ stages: [PourStage]) -> [PourStage] {
+        guard stages.count > 1,
+              let first = stages.first?.targetTime,
+              abs(first) < 0.5 else { return stages }
+        var migrated = stages
+        for idx in migrated.indices {
+            if let next = stages[safe: idx + 1]?.targetTime {
+                migrated[idx].targetTime = next
+            } else {
+                let current = stages[idx].targetTime ?? 0
+                let previous = idx > 0 ? (stages[idx - 1].targetTime ?? current) : current
+                migrated[idx].targetTime = current + max(60, current - previous)
+            }
+        }
+        return migrated
+    }
+
     // MARK: 准备：粉水比三元联动
     func setDose(_ d: Double) {
         session.dose = d.clampedTo(1...200)
@@ -101,6 +165,21 @@ final class BrewFlowController {
         session.pours = t.stages(dose: session.dose, water: session.water)
         session.currentStageIndex = 0
     }
+    func setCustomPours(_ pours: [PourStage], syncWater: Bool = true) {
+        session.pours = Self.normalizedPours(pours, fallbackWater: session.water, preserveLabels: true)
+        session.currentStageIndex = min(session.currentStageIndex, max(0, session.pours.count - 1))
+        guard syncWater, let total = session.pours.last?.targetWaterCumulative else { return }
+        session.water = total.clampedTo(1...3000)
+        if session.dose > 0 { ratio = session.water / session.dose }
+    }
+    private func finalizePours() {
+        session.pours = Self.normalizedPours(session.pours, fallbackWater: session.water, preserveLabels: false)
+        session.currentStageIndex = min(session.currentStageIndex, max(0, session.pours.count - 1))
+        if let total = session.pours.last?.targetWaterCumulative {
+            session.water = total.clampedTo(1...3000)
+            if session.dose > 0 { ratio = session.water / session.dose }
+        }
+    }
     private func rescaleTemplateWater() {
         // 末段累计水量跟随总水量同步
         guard !session.pours.isEmpty else { return }
@@ -117,6 +196,7 @@ final class BrewFlowController {
 
     // MARK: 计时
     func startTimer() {
+        finalizePours()
         session.startedAt = Date()
         session.isPaused = false
         session.accumulatedPaused = 0

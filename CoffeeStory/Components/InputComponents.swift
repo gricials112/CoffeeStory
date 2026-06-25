@@ -8,6 +8,7 @@ struct StepperField: View {
     var range: ClosedRange<Double>
     var step: Double
     var format: (Double) -> String = { NumFmt.g($0) }
+    var parse: (String) -> Double? = { Double($0) }
     var tint: Color = DT.amber
     var compact: Bool = false
 
@@ -35,7 +36,7 @@ struct StepperField: View {
         let cleaned = draft.replacingOccurrences(of: "，", with: ".")
             .replacingOccurrences(of: ",", with: ".")
             .trimmingCharacters(in: .whitespaces)
-        guard let raw = Double(cleaned) else { return }
+        guard let raw = parse(cleaned) else { return }
         let snapped = ((raw.clampedTo(range)) / step).rounded() * step
         if snapped != value { Haptics.selection() }
         value = snapped

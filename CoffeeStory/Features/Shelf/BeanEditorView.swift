@@ -23,6 +23,10 @@ struct BeanEditorView: View {
     @State private var newTag = ""
     @State private var coverData: Data?
     @State private var pickerItem: PhotosPickerItem?
+    @State private var showPickerOptions = false
+    @State private var showLibrary = false
+    @State private var showCamera = false
+    @State private var cameraImage: UIImage?
 
     private var valid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty && bagWeight >= 1
@@ -33,7 +37,7 @@ struct BeanEditorView: View {
             Form {
                 Section {
                     HStack(spacing: Space.lg) {
-                        PhotosPicker(selection: $pickerItem, matching: .images) {
+                        Button { showPickerOptions = true } label: {
                             ZStack(alignment: .bottomTrailing) {
                                 BeanCover(data: coverData, size: 64)
                                 Image(systemName: "camera.fill")
@@ -43,6 +47,17 @@ struct BeanEditorView: View {
                                     .foregroundStyle(.white)
                                     .offset(x: 4, y: 4)
                             }
+                        }
+                        .confirmationDialog("选择照片", isPresented: $showPickerOptions) {
+                            Button("拍照") { showCamera = true }
+                            Button("从相册选择") { showLibrary = true }
+                            Button("取消", role: .cancel) {}
+                        } message: {
+                            Text("点左侧拍/选豆袋照片")
+                        }
+                        .photosPicker(isPresented: $showLibrary, selection: $pickerItem, matching: .images)
+                        .fullScreenCover(isPresented: $showCamera) {
+                            CameraPicker(image: $cameraImage)
                         }
                         VStack(alignment: .leading, spacing: 4) {
                             TextField("给这包起个名", text: $name)
@@ -101,6 +116,10 @@ struct BeanEditorView: View {
                         coverData = ImageTool.downscaledJPEG(data)
                     }
                 }
+            }
+            .onChange(of: cameraImage) { _, image in
+                guard let image, let data = image.jpegData(compressionQuality: 1) else { return }
+                coverData = ImageTool.downscaledJPEG(data)
             }
         }
     }
@@ -181,6 +200,41 @@ struct BeanEditorView: View {
         if wasNew { context.insert(bean) }
         Haptics.success()
         dismiss()
+    }
+}
+
+// MARK: - 拍照
+struct CameraPicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    @Environment(\.dismiss) private var dismiss
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_: UIImagePickerController, context _: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPicker
+        init(_ parent: CameraPicker) { self.parent = parent }
+
+        func imagePickerController(_: UIImagePickerController,
+                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any])
+        {
+            if let image = info[.originalImage] as? UIImage {
+                parent.image = image
+            }
+            parent.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_: UIImagePickerController) {
+            parent.dismiss()
+        }
     }
 }
 

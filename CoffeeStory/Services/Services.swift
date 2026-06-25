@@ -41,6 +41,40 @@ enum SettingsKey {
     static let shareShowRoastInfo  = "share.showRoastInfo"
 }
 
+// MARK: - 保存的自定义注水模板
+struct SavedPourTemplate: Codable, Identifiable, Equatable {
+    var id: UUID
+    var name: String
+    var stages: [PourStage]
+}
+
+enum PourTemplateStorage {
+    private static let key = "savedPourTemplates"
+
+    static func load() -> [SavedPourTemplate] {
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let templates = try? JSONDecoder().decode([SavedPourTemplate].self, from: data)
+        else { return [] }
+        return templates
+    }
+
+    static func save(_ templates: [SavedPourTemplate]) {
+        guard let data = try? JSONEncoder().encode(templates) else { return }
+        UserDefaults.standard.set(data, forKey: key)
+    }
+
+    static func add(name: String, stages: [PourStage]) {
+        var templates = load()
+        templates.append(SavedPourTemplate(id: UUID(), name: name, stages: stages))
+        save(templates)
+    }
+
+    static func delete(_ id: UUID) {
+        var templates = load()
+        templates.removeAll { $0.id == id }
+        save(templates)
+    }
+}
 // MARK: - 注水模板
 enum PourTemplate: String, CaseIterable, Identifiable {
     case single, bloomSingle, three, four
@@ -59,26 +93,46 @@ enum PourTemplate: String, CaseIterable, Identifiable {
         let bloom = min((2 * dose).rounded(), water)
         switch self {
         case .single:
-            return [PourStage(label: "注水", targetWaterCumulative: water, targetTime: nil)]
+            return [PourStage(label: "注水", targetWaterCumulative: water, targetTime: 150)]
         case .bloomSingle:
             return [
-                PourStage(label: "闷蒸", targetWaterCumulative: bloom, targetTime: 0),
-                PourStage(label: "注水", targetWaterCumulative: water, targetTime: 30)
+                PourStage(label: "闷蒸", targetWaterCumulative: bloom, targetTime: 30),
+                PourStage(label: "注水", targetWaterCumulative: water, targetTime: 150)
             ]
         case .three:
             return [
-                PourStage(label: "闷蒸",  targetWaterCumulative: bloom, targetTime: 0),
-                PourStage(label: "注水 1", targetWaterCumulative: (water * 0.625).rounded(), targetTime: 30),
-                PourStage(label: "注水 2", targetWaterCumulative: water, targetTime: 75)
+                PourStage(label: "闷蒸",  targetWaterCumulative: bloom, targetTime: 30),
+                PourStage(label: "注水 1", targetWaterCumulative: (water * 0.625).rounded(), targetTime: 75),
+                PourStage(label: "注水 2", targetWaterCumulative: water, targetTime: 150)
             ]
         case .four:
             return [
-                PourStage(label: "闷蒸",  targetWaterCumulative: bloom, targetTime: 0),
-                PourStage(label: "注水 1", targetWaterCumulative: (water * 0.5).rounded(), targetTime: 30),
-                PourStage(label: "注水 2", targetWaterCumulative: (water * 0.75).rounded(), targetTime: 60),
-                PourStage(label: "注水 3", targetWaterCumulative: water, targetTime: 90)
+                PourStage(label: "闷蒸",  targetWaterCumulative: bloom, targetTime: 30),
+                PourStage(label: "注水 1", targetWaterCumulative: (water * 0.5).rounded(), targetTime: 60),
+                PourStage(label: "注水 2", targetWaterCumulative: (water * 0.75).rounded(), targetTime: 90),
+                PourStage(label: "注水 3", targetWaterCumulative: water, targetTime: 150)
             ]
         }
+    }
+
+    func matches(stages candidate: [PourStage], dose: Double, water: Double) -> Bool {
+        let expected = stages(dose: dose, water: water)
+        guard expected.count == candidate.count else { return false }
+        return zip(expected, candidate).allSatisfy { expected, actual in
+            let timeMatches: Bool
+            switch (expected.targetTime, actual.targetTime) {
+            case let (lhs?, rhs?): timeMatches = abs(lhs - rhs) < 0.5
+            case (nil, nil): timeMatches = true
+            default: timeMatches = false
+            }
+            return expected.label == actual.label
+                && abs(expected.targetWaterCumulative - actual.targetWaterCumulative) < 0.5
+                && timeMatches
+        }
+    }
+
+    static func matching(stages candidate: [PourStage], dose: Double, water: Double) -> PourTemplate? {
+        allCases.first { $0.matches(stages: candidate, dose: dose, water: water) }
     }
 }
 

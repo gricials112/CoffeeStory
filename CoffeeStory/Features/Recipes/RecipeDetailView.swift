@@ -33,7 +33,7 @@ struct RecipeDetailView: View {
                                 Text("\(NumFmt.g(stage.targetWaterCumulative))g")
                                     .font(.caption.monospacedDigit()).foregroundStyle(DT.inkSecondary)
                                 if let t = stage.targetTime {
-                                    Text("@ \(TimeFmt.mmss(t))").font(.caption.monospacedDigit())
+                                    Text("\(TimeFmt.mmss(t)) 完成").font(.caption.monospacedDigit())
                                         .foregroundStyle(DT.inkTertiary)
                                 }
                             }
