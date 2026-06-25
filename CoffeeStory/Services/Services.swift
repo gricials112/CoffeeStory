@@ -140,7 +140,7 @@ enum PourTemplate: String, CaseIterable, Identifiable {
 enum RecipeMatch {
     private static func roastIndex(_ r: RoastLevel) -> Int {
         switch r {
-        case .light: 0; case .mediumLight: 1; case .medium: 2; case .mediumDark: 3; case .dark: 4
+        case .extraLight: 0; case .light: 1; case .mediumLight: 2; case .medium: 3; case .mediumDark: 4; case .dark: 5
         }
     }
     private static func originToken(_ s: String) -> String {

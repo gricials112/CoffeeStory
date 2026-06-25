@@ -18,6 +18,7 @@ final class AppRouter {
     /// 无历史参数时，按烘焙度给出更合理的默认水温
     private func defaultTemp(for roast: RoastLevel) -> Double {
         switch roast {
+        case .extraLight:  96
         case .light:       95
         case .mediumLight: 93
         case .medium:      91

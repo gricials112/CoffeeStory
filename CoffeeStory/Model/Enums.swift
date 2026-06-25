@@ -24,10 +24,11 @@ struct RoastWindow {
 }
 
 enum RoastLevel: String, Codable, CaseIterable, Identifiable {
-    case light, mediumLight, medium, mediumDark, dark
+    case extraLight, light, mediumLight, medium, mediumDark, dark
     var id: String { rawValue }
     var label: String {
         switch self {
+        case .extraLight:  "极浅"
         case .light:       "浅烘"
         case .mediumLight: "中浅"
         case .medium:      "中烘"
@@ -37,6 +38,7 @@ enum RoastLevel: String, Codable, CaseIterable, Identifiable {
     }
     var window: RoastWindow {
         switch self {
+        case .extraLight:  RoastWindow(peakStart: 8, peakEnd: 30, staleAfter: 38)
         case .light:       RoastWindow(peakStart: 7, peakEnd: 28, staleAfter: 35)
         case .mediumLight: RoastWindow(peakStart: 5, peakEnd: 24, staleAfter: 32)
         case .medium:      RoastWindow(peakStart: 4, peakEnd: 21, staleAfter: 30)
