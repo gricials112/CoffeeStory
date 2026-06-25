@@ -9,3 +9,7 @@ build/
 
 # XcodeGen (committed for Xcode Cloud)
 # *.xcodeproj
+
+# Build artifacts
+.asc/artifacts/
+.asc/xccloud-workflow.json
