@@ -162,6 +162,12 @@ struct SettingsView: View {
 
     private let privacyURL = URL(string: "https://gricials112.github.io/CoffeeStory/privacy-policy.html")!
 
+    private var versionString: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
+        return "\(version) (\(build))"
+    }
+
     var body: some View {
         Form {
             Section("冲煮默认") {
@@ -188,7 +194,7 @@ struct SettingsView: View {
                 }
             }
             Section("关于") {
-                HStack { Text("版本"); Spacer(); Text("1.0 (M1)").foregroundStyle(DT.inkTertiary) }
+                HStack { Text("版本"); Spacer(); Text(versionString).foregroundStyle(DT.inkTertiary) }
                 HStack { Text("理念"); Spacer(); Text("这包豆子，越冲越好").foregroundStyle(DT.inkTertiary) }
                 Link(destination: privacyURL) {
                     HStack {

@@ -43,7 +43,7 @@ private struct ExportBean: Codable {
 
 private struct ExportRoot: Codable {
     var app = "CoffeeStory · 这包怎么冲"
-    var version = "1.0"
+    var version = "1.2.1"
     var exportedAt: Date
     var beans: [ExportBean]
 }
