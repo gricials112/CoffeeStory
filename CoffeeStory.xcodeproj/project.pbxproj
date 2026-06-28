@@ -29,6 +29,7 @@
 		90C2EE4478DCFBE64AE3D562 /* BrewingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55165CDE68BC6F8D6CEF28E0 /* BrewingView.swift */; };
 		92D4B3A19C7F75857C7B6511 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398DEA3A648F4C137FE50766 /* Theme.swift */; };
 		952C7C569EFCB29541C26E31 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF6FB6899881198888E08A0 /* Services.swift */; };
+		9DA48E02657A834FF2DD236E /* PurchaseReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2D629C3A7CDB995BEEA7E6 /* PurchaseReporter.swift */; };
 		9F03F004970E203A0A0215CA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02901004F4023D0D067520D /* OnboardingView.swift */; };
 		A10029D765FF3A073F445AB6 /* ShareCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB4BA074B3FC55BC51CE251 /* ShareCardView.swift */; };
 		AD17442B4ABD0875D305C273 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824827A6FB6CFBA6DA59D9E /* DesignTokens.swift */; };
@@ -53,6 +54,7 @@
 		17EE2A74C708E5DD1A430265 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		1A0E404673F388F85C942B08 /* CompareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareView.swift; sourceTree = "<group>"; };
 		1F5402294A06131E1BE12D75 /* CoffeeStoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeStoryApp.swift; sourceTree = "<group>"; };
+		2B2D629C3A7CDB995BEEA7E6 /* PurchaseReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseReporter.swift; sourceTree = "<group>"; };
 		2C2E1B6C6AF73AC1781CCBBD /* Products.storekit */ = {isa = PBXFileReference; path = Products.storekit; sourceTree = "<group>"; };
 		2D3910FC84ABB74909344DF7 /* ConvergenceChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvergenceChart.swift; sourceTree = "<group>"; };
 		33E078DD6AC4E5237CB73611 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				8F4A30C56DE0775F7B70C712 /* ExportService.swift */,
 				17EE2A74C708E5DD1A430265 /* PaywallView.swift */,
 				2C2E1B6C6AF73AC1781CCBBD /* Products.storekit */,
+				2B2D629C3A7CDB995BEEA7E6 /* PurchaseReporter.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				9F03F004970E203A0A0215CA /* OnboardingView.swift in Sources */,
 				E53BE3B53FE0B1358661A513 /* PaywallView.swift in Sources */,
 				7FFFD67CCE906F13A9F03A06 /* PrepareView.swift in Sources */,
+				9DA48E02657A834FF2DD236E /* PurchaseReporter.swift in Sources */,
 				6DB09B8F4E418D49DAD991C0 /* RecipeDetailView.swift in Sources */,
 				EE27B1F6F215545A27CA8D2D /* RecipesView.swift in Sources */,
 				5A1A34AF8D504F313ABF2AB3 /* ReviewComponents.swift in Sources */,
@@ -406,7 +410,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 96UBFN3CKV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -534,7 +538,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 96UBFN3CKV;
 				ENABLE_NS_ASSERTIONS = NO;

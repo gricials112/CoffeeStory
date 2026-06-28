@@ -65,6 +65,11 @@ final class Entitlements {
             switch result {
             case .success(let verification):
                 if case .verified(let t) = verification {
+                    PurchaseReporter.report(
+                        productId: t.productID,
+                        transactionId: String(t.id),
+                        displayName: product.displayName
+                    )
                     await t.finish()
                     isPro = true
                     Haptics.success()
