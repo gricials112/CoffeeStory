@@ -4,7 +4,7 @@ import Foundation
 enum PurchaseReporter {
 
     /// Worker 地址（部署后的地址）
-    private static let endpoint = URL(string: "https://asc-bark-notifier.keriadaring.workers.dev/report-purchase")!
+    private static let endpoint = URL(string: "https://bark.jiaan.online/report-purchase")!
 
     /// 上报购买成功
     /// - Parameters:
