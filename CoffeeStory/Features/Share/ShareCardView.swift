@@ -93,19 +93,18 @@ struct ShareCardView: View {
 
     @MainActor
     private func renderImage() -> Image {
-        let renderer = ImageRenderer(content:
-            ShareCard(bean: bean, brew: brew,
-                      hideName: effHideName, showBranding: effBranding,
-                      showFlavorTags: showFlavorTags,
-                      showSubScores: showSubScores,
-                      showGrinder: showGrinder,
-                      showRoastInfo: showRoastInfo,
-                      showPours: showPours,
-                      showNextTweaks: showNextTweaks,
-                      showBeanNotes: showBeanNotes,
-                      showBgImage: showBgImage)
-                .frame(width: 360)
-        )
+        let card = ShareCard(bean: bean, brew: brew,
+                             hideName: effHideName, showBranding: effBranding,
+                             showFlavorTags: showFlavorTags,
+                             showSubScores: showSubScores,
+                             showGrinder: showGrinder,
+                             showRoastInfo: showRoastInfo,
+                             showPours: showPours,
+                             showNextTweaks: showNextTweaks,
+                             showBeanNotes: showBeanNotes,
+                             showBgImage: showBgImage)
+            .frame(width: 360)
+        let renderer = ImageRenderer(content: card.fixedSize(horizontal: false, vertical: true))
         renderer.scale = 3
         if let ui = renderer.uiImage { return Image(uiImage: ui) }
         return Image(systemName: "cup.and.saucer.fill")
@@ -151,10 +150,13 @@ struct ShareCard: View {
         ZStack {
             // 背景（图片 或 纯色渐变）
             if showBgImage {
-                Image("ShareBackground")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Color.clear
+                    .overlay(
+                        Image("ShareBackground")
+                            .resizable()
+                            .scaledToFill()
+                    )
+                    .clipped()
             }
             LinearGradient(colors: [
                 Color(hex: 0x241710).opacity(showBgImage ? 0.70 : 1.0),

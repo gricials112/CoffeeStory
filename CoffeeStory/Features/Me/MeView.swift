@@ -5,6 +5,7 @@ struct MeView: View {
     @Query private var beans: [Bean]
     @Environment(Entitlements.self) private var ent
     @Environment(AppRouter.self) private var router
+    @Environment(\.modelContext) private var modelContext
     @State private var exportFile: ExportService.ExportFile?
 
     private var allBrews: [Brew] { beans.flatMap(\.brews) }
@@ -18,50 +19,106 @@ struct MeView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: Space.lg) {
-                    proCard
-                    HStack(spacing: Space.md) {
-                        statCard("累计冲煮", "\(allBrews.count)", "杯", "drop.fill", DT.amber)
-                        statCard("在架", "\(activeCount)", "包", "bag.fill", DT.coffee)
-                    }
-                    HStack(spacing: Space.md) {
-                        statCard("已喝完", "\(archivedCount)", "包", "checkmark.seal.fill", DT.peak)
-                        statCard("平均分", avgScore.map { NumFmt.score($0) } ?? "—", "分", "star.fill", DT.gold)
-                    }
+            ZStack(alignment: .bottomTrailing) {
+                ScrollView {
+                    VStack(spacing: Space.lg) {
+                        proCard
+                        HStack(spacing: Space.md) {
+                            statCard("累计冲煮", "\(allBrews.count)", "杯", "drop.fill", DT.amber)
+                            statCard("在架", "\(activeCount)", "包", "bag.fill", DT.coffee)
+                        }
+                        HStack(spacing: Space.md) {
+                            statCard("已喝完", "\(archivedCount)", "包", "checkmark.seal.fill", DT.peak)
+                            statCard("平均分", avgScore.map { NumFmt.score($0) } ?? "—", "分", "star.fill", DT.gold)
+                        }
 
-                    NavigationLink {
-                        SettingsView()
-                    } label: {
-                        rowCard("设置", systemImage: "gearshape.fill", trailing: "chevron.right")
-                    }
-                    .buttonStyle(.plain)
+                        NavigationLink {
+                            SettingsView()
+                        } label: {
+                            rowCard("设置", systemImage: "gearshape.fill", trailing: "chevron.right")
+                        }
+                        .buttonStyle(.plain)
 
-                    Button {
-                        if !ent.isPro { router.showPaywall = true; return }
-                        exportFile = ExportService.writeTempFile(beans: beans)
-                    } label: {
-                        rowCard("导出数据 (JSON)",
-                                systemImage: ent.isPro ? "tray.and.arrow.down.fill" : "lock.fill",
-                                trailing: ent.isPro ? nil : "Pro")
+                        Button {
+                            if !ent.isPro { router.showPaywall = true; return }
+                            exportFile = ExportService.writeTempFile(beans: beans)
+                        } label: {
+                            rowCard("导出数据 (JSON)",
+                                    systemImage: ent.isPro ? "tray.and.arrow.down.fill" : "lock.fill",
+                                    trailing: ent.isPro ? nil : "Pro")
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
+                    .padding(.horizontal, Space.xl)
+                    .padding(.vertical, Space.lg)
                 }
-                .padding(.horizontal, Space.xl)
-                .padding(.vertical, Space.lg)
+                .frame(maxWidth: .infinity)
+                .background(DT.canvas)
+
+                #if DEBUG
+                HStack(spacing: 8) {
+                    debugSeedButton
+                    debugProToggle
+                }
+                .padding([.trailing, .bottom], 8)
+                #endif
             }
-            .background(DT.canvas)
             .navigationTitle("我的")
             .sheet(item: $exportFile) { f in ActivityView(items: [f.url]) }
         }
-        #if DEBUG
-        .overlay(alignment: .bottomTrailing) {
-            debugProToggle
-        }
-        #endif
     }
 
     #if DEBUG
+    private var debugSeedButton: some View {
+        Button {
+            seedMockData()
+            Haptics.success()
+        } label: {
+            Label("注入Mock", systemImage: "flask.fill")
+                .font(.caption.bold())
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(DT.amber)
+                .foregroundStyle(.white)
+                .clipShape(Capsule())
+        }
+    }
+
+    private func seedMockData() {
+        let b = Bean(name: "埃塞俄比亚 古吉 罕贝拉")
+        b.roaster = "有容乃大"
+        b.originText = "埃塞俄比亚 古吉 罕贝拉"
+        b.process = .natural
+        b.roastLevel = .light
+        b.roastDate = Calendar.current.date(byAdding: .day, value: -8, to: Date())
+        b.flavorTags = ["草莓", "荔枝", "玫瑰", "红茶"]
+        b.notes = "这款豆子果酸非常明亮，高温时草莓香气很突出，降温后荔枝甜感逐渐展现，推荐养豆7天后开冲。"
+        b.grinderNote = "C40 · 24格"
+        modelContext.insert(b)
+
+        let brew = Brew(grind: 24, dose: 15, water: 240, temp: 93)
+        brew.totalTime = 148
+        brew.overall = 4.3
+        brew.acidity = 4.5; brew.sweetness = 4.2; brew.bodyScore = 3.5
+        brew.aftertaste = 4.0; brew.balance = 4.3
+        brew.pours = [
+            PourStage(label: "闷蒸", targetWaterCumulative: 30, targetTime: 30, actualAt: 32),
+            PourStage(label: "第一段", targetWaterCumulative: 100, targetTime: 55, actualAt: 56),
+            PourStage(label: "第二段", targetWaterCumulative: 170, targetTime: 85, actualAt: 88),
+            PourStage(label: "第三段", targetWaterCumulative: 240, targetTime: 120, actualAt: 122),
+        ]
+        brew.takeaway = "高温草莓香很惊艳，甜感持久"
+        brew.nextTweaks = [
+            NextTweak(dimension: .grind, direction: .finer),
+            NextTweak(dimension: .temp, direction: .down),
+        ]
+        brew.nextTweakNote = "调细一格试试能不能带出更多花香"
+        brew.bean = b
+        modelContext.insert(brew)
+
+        try? modelContext.save()
+    }
+
     private var debugProToggle: some View {
         Button {
             ent.isPro.toggle()
@@ -77,8 +134,6 @@ struct MeView: View {
                 .clipShape(Capsule())
         }
         .buttonStyle(.plain)
-        .padding(.trailing, 8)
-        .padding(.bottom, 8)
     }
     #endif
 
