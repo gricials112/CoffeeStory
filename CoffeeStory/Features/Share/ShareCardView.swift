@@ -11,6 +11,10 @@ struct ShareCardView: View {
     @AppStorage(SettingsKey.shareShowSubScores)  private var showSubScores  = false
     @AppStorage(SettingsKey.shareShowGrinder)    private var showGrinder    = false
     @AppStorage(SettingsKey.shareShowRoastInfo)  private var showRoastInfo  = false
+    @AppStorage(SettingsKey.shareShowPours)      private var showPours      = true
+    @AppStorage(SettingsKey.shareShowNextTweaks) private var showNextTweaks = true
+    @AppStorage(SettingsKey.shareShowBeanNotes)  private var showBeanNotes   = true
+    @AppStorage(SettingsKey.shareShowBgImage)    private var showBgImage     = true
     @State private var hideName    = false
     @State private var showBranding = true
 
@@ -26,8 +30,12 @@ struct ShareCardView: View {
                               showFlavorTags: showFlavorTags,
                               showSubScores: showSubScores,
                               showGrinder: showGrinder,
-                              showRoastInfo: showRoastInfo)
-                        .frame(width: 320, height: 440)
+                              showRoastInfo: showRoastInfo,
+                              showPours: showPours,
+                              showNextTweaks: showNextTweaks,
+                              showBeanNotes: showBeanNotes,
+                              showBgImage: showBgImage)
+                        .frame(width: 320)
                         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                         .shadow(color: .black.opacity(0.2), radius: 20, y: 8)
                         .padding(.top, Space.lg)
@@ -43,9 +51,16 @@ struct ShareCardView: View {
                         Toggle("风味标签", isOn: $showFlavorTags)
                         Toggle("细项评分", isOn: $showSubScores)
                         Toggle("磨豆机信息", isOn: $showGrinder)
-                            .disabled(!bean.grinderNote.isEmpty ? false : true)
+                            .disabled(bean.grinderNote.isEmpty)
                         Toggle("烘焙信息", isOn: $showRoastInfo)
-                            .disabled(bean.roastDate != nil ? false : true)
+                            .disabled(bean.roastDate == nil)
+                        Toggle("注水分段", isOn: $showPours)
+                            .disabled(brew.pours.isEmpty)
+                        Toggle("下次调整", isOn: $showNextTweaks)
+                            .disabled(brew.nextTweaks.isEmpty && brew.nextTweakNote.isEmpty)
+                        Toggle("豆子备注", isOn: $showBeanNotes)
+                            .disabled(bean.notes.isEmpty)
+                        Toggle("背景图片", isOn: $showBgImage)
 
                         if !isPro {
                             HStack(spacing: 5) {
@@ -84,8 +99,12 @@ struct ShareCardView: View {
                       showFlavorTags: showFlavorTags,
                       showSubScores: showSubScores,
                       showGrinder: showGrinder,
-                      showRoastInfo: showRoastInfo)
-                .frame(width: 360, height: 495)
+                      showRoastInfo: showRoastInfo,
+                      showPours: showPours,
+                      showNextTweaks: showNextTweaks,
+                      showBeanNotes: showBeanNotes,
+                      showBgImage: showBgImage)
+                .frame(width: 360)
         )
         renderer.scale = 3
         if let ui = renderer.uiImage { return Image(uiImage: ui) }
@@ -103,34 +122,71 @@ struct ShareCard: View {
     var showSubScores: Bool = false
     var showGrinder: Bool = false
     var showRoastInfo: Bool = false
+    var showPours: Bool = true
+    var showNextTweaks: Bool = true
+    var showBeanNotes: Bool = true
+    var showBgImage: Bool = true
 
     private let cream = Color(hex: 0xF3E9DB)
     private let creamDim = Color(hex: 0xC3B2A0)
     private let amber = Color(hex: 0xE0A03C)
     private let gold = Color(hex: 0xE6C25E)
 
+    private var displayName: String {
+        if hideName { return "我的一包豆子" }
+        return bean.name.isEmpty ? "我的一包豆子" : bean.name
+    }
+
+    private var originLine: String {
+        [bean.originText.isEmpty ? nil : bean.originText,
+         bean.process.label,
+         bean.roastLevel.label].compactMap { $0 }.joined(separator: " · ")
+    }
+
+    private var hasTweaks: Bool {
+        !brew.nextTweaks.isEmpty || !brew.nextTweakNote.isEmpty
+    }
+
     var body: some View {
         ZStack {
-            LinearGradient(colors: [Color(hex: 0x241710), Color(hex: 0x4A2E1B)],
-                           startPoint: .top, endPoint: .bottom)
+            // 背景（图片 或 纯色渐变）
+            if showBgImage {
+                Image("ShareBackground")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            LinearGradient(colors: [
+                Color(hex: 0x241710).opacity(showBgImage ? 0.70 : 1.0),
+                Color(hex: 0x4A2E1B).opacity(showBgImage ? 0.60 : 1.0)
+            ], startPoint: .top, endPoint: .bottom)
 
             VStack(alignment: .leading, spacing: 0) {
-                // header
+                // ───── Header ─────
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(hideName ? "我的一包豆子" : (bean.name.isEmpty ? "我的一包豆子" : bean.name))
+                    Text(displayName)
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundStyle(cream)
                         .lineLimit(1)
-                    Text([bean.originText.isEmpty ? nil : bean.originText, bean.process.label, bean.roastLevel.label]
-                        .compactMap { $0 }.joined(separator: " · "))
-                        .font(.system(size: 12))
-                        .foregroundStyle(creamDim)
+
+                    if !bean.roaster.isEmpty {
+                        Text(bean.roaster)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(gold)
+                    }
+
+                    if !originLine.isEmpty {
+                        Text(originLine)
+                            .font(.system(size: 12))
+                            .foregroundStyle(creamDim)
+                    }
 
                     if showFlavorTags, !bean.flavorTags.isEmpty {
                         Text(bean.flavorTags.joined(separator: " · "))
                             .font(.system(size: 11))
                             .foregroundStyle(amber)
                     }
+
                     if showRoastInfo, let d = bean.roastDate {
                         HStack(spacing: 4) {
                             Image(systemName: "calendar").font(.system(size: 9))
@@ -140,10 +196,9 @@ struct ShareCard: View {
                         .foregroundStyle(creamDim.opacity(0.8))
                     }
                 }
+                .padding(.bottom, 14)
 
-                Spacer(minLength: 0)
-
-                // ring + score + sub-scores
+                // ───── Score ─────
                 VStack(spacing: showSubScores ? 8 : 0) {
                     ZStack {
                         Circle().stroke(amber.opacity(0.2), lineWidth: 12)
@@ -170,10 +225,9 @@ struct ShareCard: View {
                         }
                     }
                 }
+                .padding(.bottom, 14)
 
-                Spacer(minLength: 0)
-
-                // params
+                // ───── Params ─────
                 HStack(spacing: 0) {
                     param("研磨", NumFmt.g(brew.grind))
                     divider
@@ -190,6 +244,51 @@ struct ShareCard: View {
                 .padding(.vertical, 10)
                 .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
 
+                // ───── Pour Stages ─────
+                if showPours, !brew.pours.isEmpty {
+                    sectionDivider("注水")
+                        .padding(.top, 14)
+                    VStack(spacing: 6) {
+                        ForEach(brew.pours) { stage in
+                            pourRow(stage)
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+
+                // ───── Next Tweaks ─────
+                if showNextTweaks, hasTweaks {
+                    sectionDivider("下次调整")
+                        .padding(.top, 14)
+                    if !brew.nextTweaks.isEmpty {
+                        VStack(spacing: 4) {
+                            ForEach(brew.nextTweaks) { tweak in
+                                Text(tweak.label)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(amber)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .padding(.top, 6)
+                    }
+                    if !brew.nextTweakNote.isEmpty {
+                        Text(brew.nextTweakNote)
+                            .font(.system(size: 11))
+                            .foregroundStyle(creamDim)
+                            .padding(.top, brew.nextTweaks.isEmpty ? 6 : 2)
+                    }
+                }
+
+                // ───── Bean Notes ─────
+                if showBeanNotes, !bean.notes.isEmpty {
+                    Text(bean.notes)
+                        .font(.system(size: 11))
+                        .foregroundStyle(creamDim)
+                        .lineLimit(3)
+                        .padding(.top, 12)
+                }
+
+                // ───── Grinder ─────
                 if showGrinder, !bean.grinderNote.isEmpty {
                     HStack(spacing: 4) {
                         Image(systemName: "gearshape.2").font(.system(size: 10))
@@ -197,9 +296,10 @@ struct ShareCard: View {
                     }
                     .font(.system(size: 11))
                     .foregroundStyle(creamDim)
-                    .padding(.top, 8)
+                    .padding(.top, 10)
                 }
 
+                // ───── Takeaway ─────
                 if !brew.takeaway.isEmpty {
                     Text("「\(brew.takeaway)」")
                         .font(.system(size: 13, weight: .medium))
@@ -209,8 +309,9 @@ struct ShareCard: View {
                         .lineLimit(2)
                 }
 
-                Spacer(minLength: 0)
+                Spacer(minLength: 4)
 
+                // ───── Branding ─────
                 if showBranding {
                     HStack {
                         Image(systemName: "drop.fill").font(.system(size: 10))
@@ -223,6 +324,39 @@ struct ShareCard: View {
             }
             .padding(20)
         }
+    }
+
+    // MARK: - Sub-views
+
+    @ViewBuilder
+    private func sectionDivider(_ title: String) -> some View {
+        HStack(spacing: 8) {
+            Rectangle().fill(creamDim.opacity(0.3)).frame(height: 1)
+            Text(title).font(.system(size: 10, weight: .semibold)).foregroundStyle(creamDim)
+            Rectangle().fill(creamDim.opacity(0.3)).frame(height: 1)
+        }
+    }
+
+    @ViewBuilder
+    private func pourRow(_ stage: PourStage) -> some View {
+        HStack {
+            Text(stage.label)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(cream)
+            Spacer()
+            Text("\(NumFmt.g(stage.targetWaterCumulative))g")
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .foregroundStyle(cream)
+            if let t = stage.actualAt ?? stage.targetTime {
+                Text("· \(TimeFmt.mmss(t))")
+                    .font(.system(size: 11, design: .rounded))
+                    .foregroundStyle(creamDim)
+                    .frame(width: 44, alignment: .trailing)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 5)
+        .background(Color.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 8))
     }
 
     @ViewBuilder

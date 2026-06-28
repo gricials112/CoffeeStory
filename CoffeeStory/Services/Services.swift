@@ -39,6 +39,10 @@ enum SettingsKey {
     static let shareShowSubScores  = "share.showSubScores"
     static let shareShowGrinder    = "share.showGrinder"
     static let shareShowRoastInfo  = "share.showRoastInfo"
+    static let shareShowPours      = "share.showPours"
+    static let shareShowNextTweaks = "share.showNextTweaks"
+    static let shareShowBeanNotes  = "share.showBeanNotes"
+    static let shareShowBgImage    = "share.showBgImage"
 }
 
 // MARK: - 保存的自定义注水模板
