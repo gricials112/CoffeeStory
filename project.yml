@@ -51,3 +51,15 @@ schemes:
       config: Debug
     archive:
       config: Release
+  Copy of CoffeeStory:
+    build:
+      targets:
+        CoffeeStory: all
+    run:
+      config: Release
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
