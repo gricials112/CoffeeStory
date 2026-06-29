@@ -43,6 +43,7 @@ enum SettingsKey {
     static let shareShowNextTweaks = "share.showNextTweaks"
     static let shareShowBeanNotes  = "share.showBeanNotes"
     static let shareShowBgImage    = "share.showBgImage"
+    static let lastReviewPromptDate = "review.lastPromptDate"
 }
 
 // MARK: - 保存的自定义注水模板

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import StoreKit
 
 // MARK: - 全局路由（管理冲煮流程覆盖层）
 @MainActor
@@ -292,7 +293,25 @@ final class BrewFlowController {
         context.delete(session)
         Haptics.success()
         didGraduate = bean.remainingGrams <= 0
+
+        // 评分≥4分且冲煮≥3次时，合适时机请求好评
+        if let overall = brew.overall, overall >= 4 {
+            requestReviewIfNeeded()
+        }
+
         return didGraduate
+    }
+
+    private func requestReviewIfNeeded() {
+        let lastPrompt = UserDefaults.standard.object(forKey: SettingsKey.lastReviewPromptDate) as? Date ?? .distantPast
+        guard Date().timeIntervalSince(lastPrompt) > 30 * 86400 else { return }
+        guard bean.brewCount >= 3 else { return }
+        UserDefaults.standard.set(Date(), forKey: SettingsKey.lastReviewPromptDate)
+        #if !DEBUG
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            SKStoreReviewController.requestReview(in: scene)
+        }
+        #endif
     }
 
     func discard() {
