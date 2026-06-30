@@ -31,6 +31,7 @@
 		952C7C569EFCB29541C26E31 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF6FB6899881198888E08A0 /* Services.swift */; };
 		9DA48E02657A834FF2DD236E /* PurchaseReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2D629C3A7CDB995BEEA7E6 /* PurchaseReporter.swift */; };
 		9F03F004970E203A0A0215CA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02901004F4023D0D067520D /* OnboardingView.swift */; };
+		A0C7B77F3BA9748E19FD0129 /* CloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6496D462FD079C99AF72D0A5 /* CloudSyncService.swift */; };
 		A10029D765FF3A073F445AB6 /* ShareCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB4BA074B3FC55BC51CE251 /* ShareCardView.swift */; };
 		AD17442B4ABD0875D305C273 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824827A6FB6CFBA6DA59D9E /* DesignTokens.swift */; };
 		B385F59811049616B5AAE973 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 980C553BC5B6AA09F59E3AAB /* SampleData.swift */; };
@@ -68,6 +69,7 @@
 		5D37D3A02F2C3604944D2F95 /* BeanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanDetailView.swift; sourceTree = "<group>"; };
 		5EA28F171E9DD974BB6C2D00 /* BeanCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanCardView.swift; sourceTree = "<group>"; };
 		624188C36D2C1C677848ED3E /* Entitlements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlements.swift; sourceTree = "<group>"; };
+		6496D462FD079C99AF72D0A5 /* CloudSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncService.swift; sourceTree = "<group>"; };
 		777927E07E3A3E66A0478137 /* CoffeeStory.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CoffeeStory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		795EC2869FB59F839950B7EE /* BrewTimelineCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewTimelineCard.swift; sourceTree = "<group>"; };
 		86C8F2CC21084A57DA97D576 /* BeanEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanEditorView.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 		B02901004F4023D0D067520D /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		B85FE485AB0F437AB6C44F63 /* CoreComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreComponents.swift; sourceTree = "<group>"; };
 		B878D8CF928EA5C90DDEEC12 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		C7BB48C2FFA0B9A4F9D88FDE /* CoffeeStory.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoffeeStory.entitlements; sourceTree = "<group>"; };
 		D872D0E52266C5AD92855A6B /* Bean+Derived.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bean+Derived.swift"; sourceTree = "<group>"; };
 		F5D444EE86B2F492716A4F3A /* ReviewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewComponents.swift; sourceTree = "<group>"; };
 		F9B597F891F36DD9C3C7B493 /* InputComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputComponents.swift; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				33E078DD6AC4E5237CB73611 /* Assets.xcassets */,
+				C7BB48C2FFA0B9A4F9D88FDE /* CoffeeStory.entitlements */,
 				F9E62AB1FEA5061066606176 /* App */,
 				85F7B3AC41E4D7D9C5076373 /* Components */,
 				8ACEAEBE28CBFBD6BEADDD56 /* DesignSystem */,
@@ -230,6 +234,7 @@
 		D9E5683DA5B1F8805383464B /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				6496D462FD079C99AF72D0A5 /* CloudSyncService.swift */,
 				4BF6FB6899881198888E08A0 /* Services.swift */,
 			);
 			path = Services;
@@ -341,6 +346,7 @@
 				D4CCA6CD9E585D8F0A9D4AAF /* BrewFlowView.swift in Sources */,
 				29647414D031BED0F00186F1 /* BrewTimelineCard.swift in Sources */,
 				90C2EE4478DCFBE64AE3D562 /* BrewingView.swift in Sources */,
+				A0C7B77F3BA9748E19FD0129 /* CloudSyncService.swift in Sources */,
 				5AA7FECF5C81425C44BD95D1 /* CoffeeStoryApp.swift in Sources */,
 				E959FE36C07636DB4EA5A43A /* CompareView.swift in Sources */,
 				D6ECFA0FD12FFB5DD99A0881 /* ConvergenceChart.swift in Sources */,
@@ -410,7 +416,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 96UBFN3CKV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -432,7 +438,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -448,13 +454,18 @@
 		36F08F2E2EB98F066469A408 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APS_ENVIRONMENT = production;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CoffeeStory/CoffeeStory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_KEY_CFBundleDisplayName = coffeestory;
 				INFOPLIST_KEY_NSCameraUsageDescription = "用于拍摄豆袋照片作为封面。";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "用于选择豆袋照片作为封面。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIBackgroundModes = (
+					"remote-notification",
+				);
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
 					UIInterfaceOrientationPortrait,
@@ -476,13 +487,18 @@
 		97956C6BA5747DB09444E8F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APS_ENVIRONMENT = development;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CoffeeStory/CoffeeStory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_KEY_CFBundleDisplayName = coffeestory;
 				INFOPLIST_KEY_NSCameraUsageDescription = "用于拍摄豆袋照片作为封面。";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "用于选择豆袋照片作为封面。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIBackgroundModes = (
+					"remote-notification",
+				);
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = (
 					UIInterfaceOrientationPortrait,
@@ -538,7 +554,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 96UBFN3CKV;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -554,7 +570,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
